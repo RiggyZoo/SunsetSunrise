@@ -13,7 +13,25 @@ class App extends React.Component {
         lon: '',
         sunrise:'',
         sunset: '',
-        error: undefined
+        error: undefined,
+        currLat:0,
+        currLon:0,
+        currCity:''
+    }
+
+    componentDidMount() {
+        debugger
+        if ("geolocation" in navigator) {
+             navigator.geolocation.getCurrentPosition((position) => {
+                this.setState({
+                    currLat: position.coords.latitude,
+                    currLon:position.coords.longitude,
+                })
+                 this.getNameOfCity(this.state.currLat,this.state.currLon)
+            });
+
+        }
+
     }
 
 
@@ -21,6 +39,7 @@ class App extends React.Component {
         this.setState({
             country: event.target.value
         })
+        console.log(this.state)
     }
     changeDateHandler = (event) => {
         this.setState({
@@ -28,8 +47,29 @@ class App extends React.Component {
         })
     }
 
+    getLocation =  async () => {
+        debugger
+        let a = window.navigator;
+        let v = await a.geolocation.getCurrentPosition(async  (a)=> {
+            await this.getNameOfCity(a.coords.latitude, a.coords.longitude);
+        })
+
+
+    }
+
+    getNameOfCity = async (lat,lon) => {
+        debugger
+        if (lat == 0 && lon == 0) return
+     const res = await fetch (`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=e736380e3e394c049d7dff11d7ed8023`)
+        const data = await res.json();
+           this.setState({
+               currCity: data.results[0].components.city,
+           })
+        console.log("api")
+    }
+
     gettingSunTime = async (e) => {
-        var city = this.state.country
+        var city = this.state.country ? this.state.country : this.state.currCity;
         var dateofDay = this.state.date
         e.preventDefault()
         if (city && dateofDay) {
@@ -61,16 +101,17 @@ class App extends React.Component {
 
 
 
+
     render() {
         return (
-            <Layout>
+
                 <React.Fragment>
                     <div className={classes.Name}>
                         <h1><strong>Sunrise and sunset application</strong></h1>
                     </div>
                     <div className="form-row">
                         <div className={classes.city}>
-                            <input type="text" className="form-control" placeholder="Name of the city" onChange={this.handlerCountry}/>
+                            <input type="text" className="form-control" placeholder={this.state.currCity} onChange={this.handlerCountry} value={this.state.country}/>
                         </div>
                         <div className={classes.city}>
                             <input type="date" className="form-control" placeholder="Date" onChange={this.changeDateHandler}/>
@@ -79,7 +120,6 @@ class App extends React.Component {
                     <div className={classes.button}>
                         <button type="button" className="btn btn-success" onClick={this.gettingSunTime}>Show</button>
                     </div>
-
                     <hr/>
                     {this.state.sunrise &&
                     <div className={classes.context}>
@@ -94,7 +134,7 @@ class App extends React.Component {
                     }
 
                 </React.Fragment>
-            </Layout>
+
 
         );
     }
