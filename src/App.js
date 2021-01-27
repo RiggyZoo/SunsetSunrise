@@ -20,7 +20,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        debugger
         if ("geolocation" in navigator) {
              navigator.geolocation.getCurrentPosition((position) => {
                 this.setState({
@@ -49,8 +48,6 @@ class App extends React.Component {
 
 
     getNameOfCity = async (lat,lon) => {
-        debugger
-        if (lat == 0 && lon == 0) return
      const res = await fetch (`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=e736380e3e394c049d7dff11d7ed8023`)
         const data = await res.json();
            this.setState({
