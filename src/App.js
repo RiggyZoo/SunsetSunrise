@@ -53,7 +53,6 @@ class App extends React.Component {
            this.setState({
                currCity: data.results[0].components.city,
            })
-        console.log("api")
     }
 
     gettingSunTime = async (e) => {
@@ -99,6 +98,7 @@ class App extends React.Component {
                     </div>
                     <div className="form-row">
                         <div className={classes.city}>
+                            <label>Type your city here:</label>
                             <input type="text" className="form-control" placeholder={this.state.currCity} onChange={this.handlerCountry} value={this.state.country}/>
                         </div>
                         <div className={classes.city}>
