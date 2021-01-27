@@ -28,7 +28,10 @@ class App extends React.Component {
                 })
                  this.getNameOfCity(this.state.currLat,this.state.currLon)
             });
-
+        } else  {
+            this.setState({
+                currCity: "nowhere"
+            })
         }
 
     }
@@ -99,7 +102,7 @@ class App extends React.Component {
                     <div className="form-row">
                         <div className={classes.city}>
                             <label>Type your city here:</label>
-                            <input type="text" className="form-control" placeholder={this.state.currCity} onChange={this.handlerCountry} value={this.state.country}/>
+                            <input type="text" className="form-control" placeholder={`Your town is ${this.state.currCity}`} onChange={this.handlerCountry} value={this.state.country}/>
                         </div>
                         <div className={classes.city}>
                             <input type="date" className="form-control" placeholder="Date" onChange={this.changeDateHandler}/>
