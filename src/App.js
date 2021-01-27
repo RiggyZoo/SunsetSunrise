@@ -47,15 +47,6 @@ class App extends React.Component {
         })
     }
 
-    getLocation =  async () => {
-        debugger
-        let a = window.navigator;
-        let v = await a.geolocation.getCurrentPosition(async  (a)=> {
-            await this.getNameOfCity(a.coords.latitude, a.coords.longitude);
-        })
-
-
-    }
 
     getNameOfCity = async (lat,lon) => {
         debugger
